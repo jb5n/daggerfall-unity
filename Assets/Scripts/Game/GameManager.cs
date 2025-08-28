@@ -142,7 +142,21 @@ namespace DaggerfallWorkshop.Game
 
         public GameObject PlayerObject
         {
-            get { return (playerObject) ? playerObject : playerObject = GetGameObjectWithTag("Player"); }
+            get
+            {
+                if (playerObject)
+                {
+                    return playerObject;
+                }
+                if (NetworkPlayerIdentity.localPlayer != null)
+                {
+                    playerObject = NetworkPlayerIdentity.localPlayer.gameObject;
+                    return playerObject;
+                }
+
+                playerObject = GetGameObjectWithTag("Player");
+                return playerObject;
+            }
             set { playerObject = value; }
         }
 
@@ -599,7 +613,10 @@ namespace DaggerfallWorkshop.Game
         /// <param name="hideHUD">HUD is disabled on screen if true. Ignored when unpausing.</param>
         public void PauseGame(bool pause, bool hideHUD = false)
         {
-            DaggerfallUI.Instance.ShowVersionText = false;
+            if (DaggerfallUI.Instance)
+            {
+                DaggerfallUI.Instance.ShowVersionText = false;
+            }
 
             if (pause && !isGamePaused)
             {
@@ -608,7 +625,7 @@ namespace DaggerfallWorkshop.Game
                 InputManager.Instance.IsPaused = true;
                 isGamePaused = true;
 
-                if (hideHUD && DaggerfallUI.Instance.DaggerfallHUD != null)
+                if (hideHUD && DaggerfallUI.Instance && DaggerfallUI.Instance.DaggerfallHUD != null)
                 {
                     DaggerfallUI.Instance.DaggerfallHUD.Enabled = false;
                     hudDisabledByPause = true;
@@ -620,7 +637,7 @@ namespace DaggerfallWorkshop.Game
                 InputManager.Instance.IsPaused = false;
                 isGamePaused = false;
 
-                if (hudDisabledByPause && DaggerfallUI.Instance.DaggerfallHUD != null)
+                if (hudDisabledByPause && DaggerfallUI.Instance && DaggerfallUI.Instance.DaggerfallHUD != null)
                 {
                     DaggerfallUI.Instance.DaggerfallHUD.Enabled = true;
                     hudDisabledByPause = false;
@@ -932,6 +949,9 @@ namespace DaggerfallWorkshop.Game
 
             // Game not active when SaveLoadManager not present or when loading
             if (SaveLoadManager.Instance == null || SaveLoadManager.Instance.LoadInProgress)
+                return false;
+
+            if (DaggerfallUI.Instance == null)
                 return false;
 
             // Game not active when top window is neither null or HUD

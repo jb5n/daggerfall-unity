@@ -353,6 +353,8 @@ namespace DaggerfallWorkshop.Game
             dfSongPlayer = GetComponent<DaggerfallSongPlayer>();
             fadeBehaviour = GetComponent<FadeBehaviour>();
 
+            SetupSingleton();
+
             Questing.Actions.GivePc.OnOfferPending += GivePc_OnOfferPending;
 
             // Create 8x scale paper doll renderer
@@ -365,8 +367,6 @@ namespace DaggerfallWorkshop.Game
 
             // Input timer at startup
             timeClosedInputMessageBox = Time.realtimeSinceStartup;
-
-            SetupSingleton();
         }
 
         void Start()
@@ -1565,7 +1565,7 @@ namespace DaggerfallWorkshop.Game
         {
             get
             {
-                if (instance == null)
+                /*if (instance == null)
                 {
                     if (!FindDaggerfallUI(out instance))
                     {
@@ -1573,7 +1573,7 @@ namespace DaggerfallWorkshop.Game
                         go.name = "DaggerfallUI";
                         instance = go.AddComponent<DaggerfallUI>();
                     }
-                }
+                }*/
                 return instance;
             }
         }

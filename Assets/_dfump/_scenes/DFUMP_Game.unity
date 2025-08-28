@@ -326,7 +326,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalFilterMode: 0
   startupMessage: 
-  enableHUD: 1
   enableVideos: 1
 --- !u!4 &97801939
 Transform:
@@ -842,7 +841,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &568293854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1180,7 +1179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &916827719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1392,7 +1391,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1102152087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2719,6 +2718,9 @@ MonoBehaviour:
   - {fileID: 1606437055}
   - {fileID: 324067380}
   - {fileID: 97801937}
+  - {fileID: 916827718}
+  - {fileID: 1102152086}
+  - {fileID: 568293853}
   interiorParent: {fileID: 1551452250}
   exteriorParent: {fileID: 1374841683}
   dungeonParent: {fileID: 620133648}

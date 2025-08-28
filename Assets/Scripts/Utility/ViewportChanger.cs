@@ -35,7 +35,7 @@ namespace DaggerfallWorkshop.Utility
         private void Update()
         {
             // HUD must be created
-            if (DaggerfallUI.Instance.DaggerfallHUD == null)
+            if (DaggerfallUI.Instance == null || DaggerfallUI.Instance.DaggerfallHUD == null)
                 return;
 
             // Offload when using retro aspect correction

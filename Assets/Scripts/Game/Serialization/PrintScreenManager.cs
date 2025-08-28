@@ -47,22 +47,22 @@ namespace DaggerfallWorkshop.Game.Serialization
 
         public string UnityScreenshotsPath
         {
-            get { return GetUnityScreenshotsPath(); } 
+            get { return GetUnityScreenshotsPath(); }
         }
 
         #endregion
 
         #region Unity
 
-        void Start ()
+        void Start()
         {
             DaggerfallWorkshop.Game.InputManager.OnSavedKeyBinds += GetPrintScreenKeyBind;
             GetPrintScreenKeyBind();
         }
 
-        void Update ()
+        void Update()
         {
-            if (DaggerfallUI.Instance.HotkeySequenceProcessed == HotkeySequence.HotkeySequenceProcessStatus.NotFound)
+            if (DaggerfallUI.Instance && DaggerfallUI.Instance.HotkeySequenceProcessed == HotkeySequence.HotkeySequenceProcessStatus.NotFound)
             {
                 if (InputManager.Instance.GetKeyUp(prtscrBinding))
                     StartCoroutine(TakeScreenshot());
