@@ -80,7 +80,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
 
         RacialOverrideEffect racialOverrideEffect;
         PassiveSpecialsEffect passiveSpecialsEffect;
-        
+
         Dictionary<ulong, DaggerfallUnityItem> activeMagicItemsInRound = new Dictionary<ulong, DaggerfallUnityItem>();
         Dictionary<ulong, DaggerfallUnityItem> itemsPendingReroll = new Dictionary<ulong, DaggerfallUnityItem>();
 
@@ -869,7 +869,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         /// </summary>
         public void UpdateHUDSpellIcons()
         {
-            if (DaggerfallUI.Instance.enableHUD && DaggerfallUI.Instance.DaggerfallHUD.ActiveSpells != null)
+            if (DaggerfallUI.Instance.GetEnableHUD() && DaggerfallUI.Instance.DaggerfallHUD.ActiveSpells != null)
                 DaggerfallUI.Instance.DaggerfallHUD.ActiveSpells.UpdateIcons();
         }
 
@@ -921,7 +921,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
                 for (int i = 0; i < secondaryEffects.Count; i++)
                 {
                     IEntityEffect effect = effectBroker.GetEffectTemplate(secondaryEffects[i]);
-                    potionEffects[i+1] = new EffectEntry(effect.Key, potionRecipe.Settings);
+                    potionEffects[i + 1] = new EffectEntry(effect.Key, potionRecipe.Settings);
                 }
             }
             else
@@ -1270,7 +1270,7 @@ namespace DaggerfallWorkshop.Game.MagicAndEffects
         }
 
         int GetEffectCastingCost(IEntityEffect effect, TargetTypes targetType, DaggerfallEntity casterEntity)
-        {            
+        {
             (int _, int spellPointCost) = FormulaHelper.CalculateEffectCosts(effect, effect.Settings, casterEntity);
             spellPointCost = FormulaHelper.ApplyTargetCostMultiplier(spellPointCost, targetType);
 

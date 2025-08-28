@@ -69,7 +69,7 @@ namespace DaggerfallWorkshop.Game.UserInterface
         /// </summary>
         public int WindowCount
         {
-            get { return windows.Count-1; }
+            get { return windows.Count - 1; }
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace DaggerfallWorkshop.Game.UserInterface
         {
             windows.Push(window);
             window.OnPush();
-            if(window.PauseWhileOpen && GameManager.HasInstance)
+            if (window.PauseWhileOpen && GameManager.HasInstance)
                 GameManager.Instance.PauseGame(true);
         }
 
@@ -198,7 +198,7 @@ namespace DaggerfallWorkshop.Game.UserInterface
                     TopWindow.OnReturn();
             }
 
-            if (DaggerfallUI.Instance.enableHUD)
+            if (DaggerfallUI.Instance.GetEnableHUD())
             {
                 if (windows.Count <= 1 && GameManager.HasInstance)
                 {

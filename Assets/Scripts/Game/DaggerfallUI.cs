@@ -27,6 +27,7 @@ using DaggerfallWorkshop.Game.MagicAndEffects;
 using DaggerfallWorkshop.Game.MagicAndEffects.MagicEffects;
 using UnityEngine.Localization.Settings;
 using static DaggerfallWorkshop.Game.UserInterface.BaseScreenComponent;
+using Mirror;
 
 namespace DaggerfallWorkshop.Game
 {
@@ -76,14 +77,17 @@ namespace DaggerfallWorkshop.Game
         public static Color DaggerfallDefaultShopAutomapColor = new Color32(190, 85, 24, 255);
         public static Color DaggerfallDefaultTavernAutomapColor = new Color32(85, 117, 48, 255);
         public static Color DaggerfallDefaultHouseAutomapColor = new Color32(69, 60, 40, 255);
-		public static Color DaggerfallDefaultMicMapInnerQoLColor = new Color32(212, 135, 208, 255);
+        public static Color DaggerfallDefaultMicMapInnerQoLColor = new Color32(212, 135, 208, 255);
         public static Color DaggerfallDefaultMicMapBorderQoLColor = new Color32(250, 180, 3, 255);
         public static Vector2 DaggerfallDefaultShadowPos = Vector2.one;
 
         public FilterMode globalFilterMode = FilterMode.Point;
         public string startupMessage = string.Empty;
-        public bool enableHUD = false;
+        public bool GetEnableHUD() { return _enableHUD; }
         public bool enableVideos = true;
+
+        [ShowInInspector]
+        private bool _enableHUD = true;
 
         DaggerfallUnity dfUnity;
         AudioSource audioSource;
@@ -154,7 +158,7 @@ namespace DaggerfallWorkshop.Game
         public static DaggerfallFont TitleFont { get { return Instance.GetFont(DaggerfallFont.FontName.FONT0001); } }
         public static DaggerfallFont SmallFont { get { return Instance.GetFont(DaggerfallFont.FontName.FONT0002); } }
         public static DaggerfallFont DefaultFont { get { return Instance.GetFont(DaggerfallFont.FontName.FONT0003); } }
-        
+
         public static IUserInterfaceManager UIManager { get { return Instance.uiManager; } }
 
         public Material PixelFontMaterial { get { return pixelFontMaterial; } set { pixelFontMaterial = value; } }
@@ -237,7 +241,7 @@ namespace DaggerfallWorkshop.Game
         public HotkeySequence.HotkeySequenceProcessStatus HotkeySequenceProcessed
         {
             get { return hotkeySequenceProcessed; }
-            private set {  hotkeySequenceProcessed = value; }
+            private set { hotkeySequenceProcessed = value; }
         }
 
         public DaggerfallHUD DaggerfallHUD
@@ -402,7 +406,7 @@ namespace DaggerfallWorkshop.Game
             // HUD is always first window on stack when ready
             if (dfUnity.IsPathValidated && !hudSetup)
             {
-                if (enableHUD)
+                if (_enableHUD)
                 {
                     dfHUD = new DaggerfallHUD(uiManager);
                     uiManager.PushWindow(dfHUD);
@@ -447,7 +451,7 @@ namespace DaggerfallWorkshop.Game
             // Possible to get multiple keydown events per frame, one with character, one with keycode
             // Only accept character or keycode if valid
             lastKeyModifiers = HotkeySequence.GetKeyboardKeyModifiers();
-            
+
             if (Event.current.type == EventType.KeyDown)
             {
                 if (Event.current.character != (char)0)
@@ -828,7 +832,7 @@ namespace DaggerfallWorkshop.Game
         /// </summary>
         public void PopToHUD()
         {
-            if (!enableHUD || dfHUD == null)
+            if (!_enableHUD || dfHUD == null)
                 return;
 
             while (uiManager.TopWindow != dfHUD)
@@ -1229,7 +1233,7 @@ namespace DaggerfallWorkshop.Game
                 imgFile.LoadPalette(Path.Combine(dfUnity.Arena2Path, imgFile.PaletteName));
                 texture = GetTextureFromImg(imgFile, format, readOnly);
             }
-                
+
             texture.filterMode = DaggerfallUI.Instance.GlobalFilterMode;
             offset = imgFile.ImageOffset;
 
@@ -1673,7 +1677,7 @@ namespace DaggerfallWorkshop.Game
                 // Only report poisoning if one or more poisons are active
                 bool poisonActive = false;
                 LiveEffectBundle[] poisonBundles = playerEffectManager.PoisonBundles;
-                foreach(LiveEffectBundle poisonBundle in poisonBundles)
+                foreach (LiveEffectBundle poisonBundle in poisonBundles)
                 {
                     foreach (IEntityEffect effect in poisonBundle.liveEffects)
                     {

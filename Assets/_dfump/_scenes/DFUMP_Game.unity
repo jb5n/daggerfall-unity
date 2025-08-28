@@ -326,7 +326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalFilterMode: 0
   startupMessage: 
-  enableHUD: 0
+  enableHUD: 1
   enableVideos: 1
 --- !u!4 &97801939
 Transform:
