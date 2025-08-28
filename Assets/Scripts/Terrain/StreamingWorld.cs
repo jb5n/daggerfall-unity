@@ -35,7 +35,7 @@ namespace DaggerfallWorkshop
     /// Inactive terrains greater than TerrainDistance+1 from player will be recycled.
     /// Locations and other loose objects greater than TerrainDistance+1 from player will be destroyed.
     /// </summary>
-    public class StreamingWorld : MonoBehaviour
+    public class StreamingWorld : Singleton<StreamingWorld>
     {
         #region Fields
 
@@ -226,8 +226,9 @@ namespace DaggerfallWorkshop
 
         #region Unity
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             SaveLoadManager.OnStartLoad += SaveLoadManager_OnStartLoad;
             StartGameBehaviour.OnNewGame += StartGameBehaviour_OnNewGame;
         }
@@ -485,7 +486,8 @@ namespace DaggerfallWorkshop
 
         public void ClearStatefulLooseObjects()
         {
-            looseObjectsList.RemoveAll(x => {
+            looseObjectsList.RemoveAll(x =>
+            {
                 if (x.statefulObj)
                     Destroy(x.gameObject);
                 return x.statefulObj;
@@ -1625,7 +1627,7 @@ namespace DaggerfallWorkshop
         {
             // Destroy loose enemies
             EnemyMotor[] enemies = StreamingTarget.GetComponentsInChildren<EnemyMotor>();
-            foreach(EnemyMotor enemy in enemies)
+            foreach (EnemyMotor enemy in enemies)
                 GameObject.Destroy(enemy.gameObject);
 
             // Destroy loose missiles

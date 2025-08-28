@@ -731,7 +731,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &334547542
 PrefabInstance:
@@ -746,7 +746,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 53a45b46ca97a974f8e677f68c2a85e6, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 53a45b46ca97a974f8e677f68c2a85e6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -851,7 +851,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &348738040
 MonoBehaviour:
@@ -1509,7 +1509,7 @@ Transform:
   m_Children:
   - {fileID: 1618337110}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1102152089
 Camera:
@@ -2088,13 +2088,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runtimeInternalStrings: Internal_Strings
   runtimeRSCStrings: Internal_RSC
-  runtimeBOKStrings: Internal_BOK
   runtimeFlatStrings: Internal_Flats
+  runtimeQuestsStrings: Internal_Quests
+  runtimeLocationsStrings: Internal_Locations
+  runtimeSettingsStrings: Internal_Settings
+  runtimeSpellsStrings: Internal_Spells
+  runtimeItemsStrings: Internal_Items
+  runtimeMagicItemsStrings: Internal_MagicItems
+  runtimeFactionsStrings: Internal_Factions
   tableCopyOverwriteTargetStringTables: 0
   tableCopyTargetInternalStrings: 
   tableCopyTargetRSCStrings: 
   tableCopyTargetBOKStrings: 
   tableCopyTargetFlatStrings: 
+  tableCopyTargetLocationStrings: 
 --- !u!4 &1437448955
 Transform:
   m_ObjectHideFlags: 0
@@ -2282,7 +2289,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1618337109
 GameObject:

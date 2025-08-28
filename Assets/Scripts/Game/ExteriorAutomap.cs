@@ -251,7 +251,7 @@ namespace DaggerfallWorkshop.Game
             get { return (revealUndiscoveredBuildings); }
             set { revealUndiscoveredBuildings = value; }
         }
-        
+
 
         #endregion
 
@@ -561,7 +561,7 @@ namespace DaggerfallWorkshop.Game
             };
             m.uv = new Vector2[] {
                 new Vector2 (0, 1),
-                new Vector2 (1, 1),                
+                new Vector2 (1, 1),
                 new Vector2(1, 0),
                 new Vector2 (0, 0)
             };
@@ -589,12 +589,12 @@ namespace DaggerfallWorkshop.Game
             };
             m.uv = new Vector2[] {
                 new Vector2 (0, 1),
-                new Vector2 (1, 1),                
+                new Vector2 (1, 1),
                 new Vector2(1, 0),
                 new Vector2 (0, 0)
             };
             m.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
-            m.RecalculateNormals();            
+            m.RecalculateNormals();
             return m;
         }
 
@@ -716,7 +716,7 @@ namespace DaggerfallWorkshop.Game
                                     buildingSummary.FactionId,
                                     TextManager.Instance.GetLocalizedLocationName(location.MapTableData.MapId, location.Name),
                                     TextManager.Instance.GetLocalizedRegionName(location.RegionIndex));
-                            }                  
+                            }
                         }
                         catch (Exception e)
                         {
@@ -787,7 +787,7 @@ namespace DaggerfallWorkshop.Game
                         {
                             newBuildingNameplate.uniqueIndex = uniqueIndex++;
                             newBuildingNameplate.anchorPoint.x = xPosBuilding;
-                            newBuildingNameplate.anchorPoint.y = yPosBuilding;                            
+                            newBuildingNameplate.anchorPoint.y = yPosBuilding;
                             newBuildingNameplate.gameObject = new GameObject(String.Format("building name plate for [{0}] _not initialized_yet_", newBuildingNameplate.name));
                             newBuildingNameplate.textLabel = DaggerfallUI.AddTextLabel(DaggerfallUI.DefaultFont, Vector2.zero, newBuildingNameplate.name);
                             newBuildingNameplate.textLabel.TextScale = 1.0f;
@@ -1051,7 +1051,7 @@ namespace DaggerfallWorkshop.Game
         private bool CheckIntersectionOffsetNameplateAgainstOthers(BuildingNameplate nameplate, Vector2 tryOffset, bool onlyCheckPlaced = false, bool onlyCheckUnplaced = false, BuildingNameplate? skipNameplate = null)
         {
             bool check = false;
-            for (int i=0; i < buildingNameplates.Length; i++)
+            for (int i = 0; i < buildingNameplates.Length; i++)
             {
                 BuildingNameplate otherNameplate = buildingNameplates[i];
                 if ((skipNameplate.HasValue) && (skipNameplate.Value.uniqueIndex == otherNameplate.uniqueIndex))
@@ -1064,7 +1064,7 @@ namespace DaggerfallWorkshop.Game
                     continue;
                 check |= CheckIntersectionOfNameplates(nameplate, tryOffset, otherNameplate, Vector2.zero);
                 if (check)
-                    break;                
+                    break;
             }
             return check;
         }
@@ -1119,7 +1119,7 @@ namespace DaggerfallWorkshop.Game
                 // store changes to nameplates array
                 buildingNameplates[i] = buildingNameplate;
             }
-                        
+
             if (allowRightAlignedNameplates)
             {
                 // compute number of collisions for right aligned nameplates and directly place those with numCollisionsDetected == 0
@@ -1367,7 +1367,7 @@ namespace DaggerfallWorkshop.Game
             {
                 BuildingNameplate buildingNameplate = buildingNameplates[i];
                 if (!buildingNameplate.placed)
-                {        
+                {
                     buildingNameplate.placed = true;
                     buildingNameplate.nameplateReplaced = true;
                 }
@@ -1378,6 +1378,11 @@ namespace DaggerfallWorkshop.Game
 
         private void UpdatePlayerMarker()
         {
+            if (gameobjectPlayerMarkerArrow == null || gameObjectPlayerAdvanced == null)
+            {
+                return;
+            }
+
             // place player marker            
             Vector3 playerPos;
             float scale = MapsFile.WorldMapTerrainDim * MeshReader.GlobalScale;
@@ -1390,8 +1395,8 @@ namespace DaggerfallWorkshop.Game
             float yOffset = 0.0f;
             if (isCustomLocation)
             {
-                xOffset = -64f;           
-                yOffset =  +3f;
+                xOffset = -64f;
+                yOffset = +3f;
             }
 
             int refWidth = (int)(blockSizeWidth * numMaxBlocksX * layoutMultiplier); // layoutWidth / layoutMultiplier

@@ -50,7 +50,6 @@ namespace DaggerfallWorkshop.Game
         bool displayAfloatMessage = false;
         DaggerfallInterior interior;
         DaggerfallDungeon dungeon;
-        StreamingWorld world;
         PlayerGPS playerGPS;
         Entity.DaggerfallEntityBehaviour player;
         LevitateMotor levitateMotor;
@@ -309,12 +308,15 @@ namespace DaggerfallWorkshop.Game
         {
             dfUnity = DaggerfallUnity.Instance;
             playerGPS = GetComponent<PlayerGPS>();
-            world = FindObjectOfType<StreamingWorld>();
-            player = GameManager.Instance.PlayerEntityBehaviour;
+            player = GetComponent<DaggerfallEntityBehaviour>();
         }
 
         void Start()
         {
+            InteriorParent = NetConnectionManager.instance.interiorParent;
+            ExteriorParent = NetConnectionManager.instance.exteriorParent;
+            DungeonParent = NetConnectionManager.instance.dungeonParent;
+
             // Wire event for when player enters a new location
             PlayerGPS.OnEnterLocationRect += PlayerGPS_OnEnterLocationRect;
             EntityEffectBroker.OnNewMagicRound += EntityEffectBroker_OnNewMagicRound;
@@ -323,7 +325,7 @@ namespace DaggerfallWorkshop.Game
         }
 
         void Update()
-        {            
+        {
             // Track which dungeon block player is inside of
             if (dungeon && isPlayerInsideDungeon)
             {
@@ -494,8 +496,8 @@ namespace DaggerfallWorkshop.Game
 
             // Set streaming world coordinates
             DFPosition pos = MapsFile.WorldCoordToMapPixel(worldX, worldZ);
-            world.MapPixelX = pos.X;
-            world.MapPixelY = pos.Y;
+            StreamingWorld.instance.MapPixelX = pos.X;
+            StreamingWorld.instance.MapPixelY = pos.Y;
 
             // Get location at this position
             ContentReader.MapSummary summary;
@@ -508,16 +510,16 @@ namespace DaggerfallWorkshop.Game
                 if (!forceReposition)
                 {
                     // Teleport to explicit world coordinates
-                    world.TeleportToWorldCoordinates(worldX, worldZ);
+                    StreamingWorld.instance.TeleportToWorldCoordinates(worldX, worldZ);
                 }
                 else
                 {
                     // Force reposition to closest start marker if available
-                    world.TeleportToCoordinates(pos.X, pos.Y, StreamingWorld.RepositionMethods.RandomStartMarker);
+                    StreamingWorld.instance.TeleportToCoordinates(pos.X, pos.Y, StreamingWorld.RepositionMethods.RandomStartMarker);
                 }
 
                 // Wait until world is ready
-                while (world.IsInit)
+                while (StreamingWorld.instance.IsInit)
                     yield return new WaitForEndOfFrame();
 
                 // Raise transition exterior event if player was inside a dungeon or building
@@ -531,26 +533,26 @@ namespace DaggerfallWorkshop.Game
             {
                 // Start in dungeon
                 DFLocation location;
-                world.TeleportToCoordinates(pos.X, pos.Y, StreamingWorld.RepositionMethods.None);
+                StreamingWorld.instance.TeleportToCoordinates(pos.X, pos.Y, StreamingWorld.RepositionMethods.None);
                 dfUnity.ContentReader.GetLocation(summary.RegionIndex, summary.MapIndex, out location);
                 StartDungeonInterior(location, true, importEnemies);
-                world.suppressWorld = false;
+                StreamingWorld.instance.suppressWorld = false;
             }
             else if (hasLocation && insideBuilding && exteriorDoors != null)
             {
                 // Start in building
                 DFLocation location;
-                world.TeleportToCoordinates(pos.X, pos.Y, StreamingWorld.RepositionMethods.None);
+                StreamingWorld.instance.TeleportToCoordinates(pos.X, pos.Y, StreamingWorld.RepositionMethods.None);
                 dfUnity.ContentReader.GetLocation(summary.RegionIndex, summary.MapIndex, out location);
                 StartBuildingInterior(location, exteriorDoors[0], start);
-                world.suppressWorld = false;
+                StreamingWorld.instance.suppressWorld = false;
             }
             else
             {
                 // All else fails teleport to map pixel
                 DaggerfallUnity.LogMessage("Something went wrong! Teleporting to origin of nearest map pixel.");
                 EnableExteriorParent();
-                world.TeleportToCoordinates(pos.X, pos.Y);
+                StreamingWorld.instance.TeleportToCoordinates(pos.X, pos.Y);
             }
 
             // Lower respawn flag
@@ -685,11 +687,11 @@ namespace DaggerfallWorkshop.Game
             if (!start)
             {
                 // Update scene cache from serializable state for exterior->interior transition
-                SaveLoadManager.CacheScene(world.SceneName);
+                SaveLoadManager.CacheScene(StreamingWorld.instance.SceneName);
                 // Explicitly deregister all stateful objects since exterior isn't destroyed
                 SaveLoadManager.DeregisterAllSerializableGameObjects(true);
                 // Clear all stateful objects from world loose object tracking
-                world.ClearStatefulLooseObjects();
+                StreamingWorld.instance.ClearStatefulLooseObjects();
             }
 
             // Ensure building variant checks use this location.
@@ -864,7 +866,7 @@ namespace DaggerfallWorkshop.Game
             Vector3 closestDoorPos = DaggerfallStaticDoors.FindClosestDoor(transform.position, ExteriorDoors, out closestDoor);
             Vector3 normal = DaggerfallStaticDoors.GetDoorNormal(closestDoor);
             Vector3 position = closestDoorPos + normal * (controller.radius * 3f);
-            world.SetAutoReposition(StreamingWorld.RepositionMethods.Offset, position);
+            StreamingWorld.instance.SetAutoReposition(StreamingWorld.RepositionMethods.Offset, position);
 
             EnableExteriorParent();
 
@@ -877,7 +879,7 @@ namespace DaggerfallWorkshop.Game
             factionID = 0;
 
             // Update serializable state from scene cache for interior->exterior transition
-            SaveLoadManager.RestoreCachedScene(world.SceneName);
+            SaveLoadManager.RestoreCachedScene(StreamingWorld.instance.SceneName);
 
             // Fire event
             RaiseOnTransitionExteriorEvent();
@@ -1064,7 +1066,7 @@ namespace DaggerfallWorkshop.Game
             DisableAllParents(false);
             if (ExteriorParent != null) ExteriorParent.SetActive(true);
 
-            world.suppressWorld = false;
+            StreamingWorld.instance.suppressWorld = false;
             isPlayerInside = false;
             isPlayerInsideDungeon = false;
 
@@ -1197,7 +1199,7 @@ namespace DaggerfallWorkshop.Game
             PlayerTeleportedIntoDungeon = false;
 
             // Position player to door
-            world.SetAutoReposition(StreamingWorld.RepositionMethods.DungeonEntrance, Vector3.zero);
+            StreamingWorld.instance.SetAutoReposition(StreamingWorld.RepositionMethods.DungeonEntrance, Vector3.zero);
 
             // Raise event
             RaiseOnTransitionDungeonExteriorEvent();
@@ -1258,7 +1260,7 @@ namespace DaggerfallWorkshop.Game
             // Look for required components
             if (controller == null)
                 controller = GetComponent<CharacterController>();
-            
+
             // Fail if missing required components
             if (dfUnity == null || controller == null)
                 return false;
